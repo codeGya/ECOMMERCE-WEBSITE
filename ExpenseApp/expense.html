@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense</title>
+</head>
+<body>
+    <form id="myform">
+        <label for="price">Rs. Spend- </label>
+        <input type="number" id="price" name="price">
+        <br>
+        <br>
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description">
+        <br>
+        <br>
+        <label for="no.ofquantity">Quantity</label>
+        <input type="number" id="no.ofquantity" name="no.ofquantity">
+        <br>
+        <br>
+        <select for="expense" id="variety">
+            <option value="petrol">Petrol</option>
+            <option value="health">Health</option>
+            <option value="groceries">Grocery</option>
+            <option value="entairtnment">Entertainment</option>
+            <option value="vacation">Vacation</option>
+        </select>
+        <!--<button type="button">SUBMIT YOUR DETAILS</button>-->
+        <input type="submit" value="SUBMIT DETAILS">
+    </form>
+    <ul id="displayBeforeRefreshingPage"></ul>
+    <ul id="dispalyAfterRefreshingPage"></ul>
+    <script src="expenseApp.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js" integrity="sha512-0qU9M9jfqPw6FKkPafM3gy2CBAvUWnYVOfNPDYKVuRTel1PrciTj+a9P3loJB+j0QmN2Y0JYQmkBBS8W+mbezg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>"
+    
+</body>
+</html>
