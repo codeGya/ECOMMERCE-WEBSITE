@@ -51,7 +51,7 @@ async function cartItems(e)
     //console.log(waitForGettingData)
     createNotification(waitForGettingData.data.title)
     
-    document.getElementById('items').innerHTML=document.getElementById('items').innerHTML+`<li>Price-${waitForGettingData.data.price} Title-${waitForGettingData.data.title}</li>`
+    document.getElementById('list').innerHTML=document.getElementById('list').innerHTML+`<li>Price-${waitForGettingData.data.price} Title-${waitForGettingData.data.title}<img src=${waitForGettingData.data.imageurl}></li>`
     
     
 }
@@ -79,6 +79,17 @@ function createNotification(a)
         createElement.remove()
 
     },3000)
+}
+
+document.getElementById("cart").addEventListener('click',displayingCartButton)
+
+function displayingCartButton()
+{
+    document.getElementById("cart").classList.toggle('active')
+    document.getElementById("nav").classList.toggle('active')
+
+
+
 }
 
 
