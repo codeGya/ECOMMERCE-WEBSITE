@@ -22,3 +22,9 @@ async function signInPageForUsers(e)
 
    // document.getElementById('old').innerHTML=`<li>${waitForLoggingIn.data}</li>`
 }
+document.getElementById('pay').addEventListener('click',sendPaymentRelatedData)
+
+async function sendPaymentRelatedData()
+{
+    const waitForSendingDataToBackend=await axios.post()
+}

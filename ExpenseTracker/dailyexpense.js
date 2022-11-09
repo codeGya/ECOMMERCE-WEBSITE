@@ -85,3 +85,11 @@ async function deleteUserFromBackendAfterRefreshingPage(a)
     document.getElementById('oldexpenses').removeChild(document.getElementById(a))
 
 }
+
+document.getElementById('pay').addEventListener('click',sendPremiumAccountDetails)
+
+async function sendPremiumAccountDetails()
+{
+
+    await axios.post()
+}
