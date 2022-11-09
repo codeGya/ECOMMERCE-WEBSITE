@@ -7,6 +7,7 @@ async function dispalyAfterRefreshingPage()
     let waitForGettingDataFromBackend=await axios.get(`http://localhost:3500/get-user-data/?page=${page}`)
    //  let dataFromBackend=waitForGettingDataFromBackend.data
 //     //console.log(dataFromBackend)
+//console.log(waitForGettingDataFromBackend,'i want to debug my error')
     let elementToPresentData=document.getElementById('gadgets')
     //let output=""
 
@@ -127,46 +128,42 @@ async function  getDataFromBackend()
 {
     const page=1
     let waitForGettingDataOfCart=await axios.get(`http://localhost:3500/get-user/?page=${page}`)
-    //console.log(waitForGettingDataOfCart.data)
+    //console.log(waitForGettingDataOfCart)
     //document.getElementById('list').innerHTML=`<li>Price-${waitForGettingDataOfCart.data.price} Title-${waitForGettingDataOfCart.data.title}</li>`
     let output=""
-   console.log(waitForGettingDataOfCart)
+   //console.log(waitForGettingDataOfCart)
     
     for(let i=0;i<waitForGettingDataOfCart.data.data.length;i=i+1)
     {
-       output=output+`<li>Price-${waitForGettingDataOfCart.data.data[i].price} Title-${waitForGettingDataOfCart.data.data[i].title}<img src=${waitForGettingDataOfCart.data.data[i].imageurl}></li>`
+       output=output+`<li>Price-${waitForGettingDataOfCart.data.data[i].price} Title-${waitForGettingDataOfCart.data.data[i].title}<img src=${waitForGettingDataOfCart.data.data[i].imageurl}><label for='quantity'>Quantity:</label><input value=${waitForGettingDataOfCart.data.data[i].cartItem.quantity} type=number></li>`
 
     }
     console.log(output)
-    document.getElementById('list').innerHTML=output
-    cartPaginationFunction(waitForGettingDataOfCart.data.key)
+
+
+   //document.getElementById('list').innerHTML=""
+   document.getElementById('list').innerHTML=output
+   cartPaginationFunction(waitForGettingDataOfCart.data.key)
 
 }
 document.getElementById('gadgets').addEventListener('click',storeDataInCartDataBase)
 
 async function storeDataInCartDataBase(e)
 {
-    const whichButtonGotClicked=e.target.id
-   const waitForGettingData=await axios.get(`http://localhost:3500/get-user/${whichButtonGotClicked}`)
-   //console.log(waitForGettingData)
+   const whichButtonGotClicked=e.target.id
 
-    //await axios.get()
     const user={
-        id:waitForGettingData.data.id,
-        imageurl:waitForGettingData.data.imageurl,
-        price:waitForGettingData.data.price,
-        title:waitForGettingData.data.title
-
-
+        id:whichButtonGotClicked
     }
 
     const waitForPostingDataToCartDataBase=await axios.post('http://localhost:3500/post-cart',user)
+    //console.log(waitForPostingDataToCartDataBase)
 }
 
 
 async function paginationPage(a)
 {
-    //console.log(a)
+   console.log(a,'whether i reached here or not')
    //let currentPage=a.currentPage
    //console.log(a)
     
@@ -203,7 +200,7 @@ async function paginationPage(a)
         document.getElementById('a').innerHTML=`<button id=${a.previousPage} onclick=routeToBackend("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackend("${a.currentPage}")>${a.currentPage}</button>....<button id=${a.lastPage} onclick=routeToBackend("${a.lastPage}")>${a.lastPage}</button> `
     }
 
-    else if(a.hasNextPage && a.currentPage!=a.lastPage && a.hasPreviouPage)
+    else if(a.hasNextPage && a.currentPage!=a.lastPage && a.hasPreviouPage && a.nextPage!==a.lastPage)
     {
         console.log('i am 2')
         document.getElementById('a').innerHTML=`<button id=${a.previousPage} onclick=routeToBackend("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackend("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackend("${a.nextPage}")>${a.nextPage}</button>... <button id=${a.lastPage} onclick=routeToBackend("${a.lastPage}")>${a.lastPage}</button> `
@@ -233,7 +230,7 @@ async function paginationPage(a)
         document.getElementById('a').innerHTML=`<button id=${a.currentPage} onclick=routeToBackend("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackend("${a.nextPage}")>${a.nextPage}</button>  <button id=${a.lastPage} onclick=routeToBackend("${a.lastPage}")>${a.lastPage}</button> `
 
     }
-    else if(a.currentPage==a.lastPage)
+    else if(a.currentPage==a.lastPage && a.hasPreviouPage)
     {
         console.log('i am 7')
         document.getElementById('a').innerHTML=`<button id=${a.previousPage} onclick=routeToBackend("${a.previousPage}")>${a.previousPage}</button>  <button id=${a.currentPage} onclick=routeToBackend("${a.currentPage}")>${a.currentPage}</button>`
@@ -263,6 +260,25 @@ async function paginationPage(a)
 
 
     // }
+    // const b=1
+
+    // document.getElementById('a').innerHTML=`<button id=${b} onclick=routeToBackend("${b}")>${b}</button>`
+
+    // if(a.currentPage!==1 && a.hasPreviouPage && a.previousPage!==1  && a.hasNextPage )
+    // {
+    //     //<button id=${a.lastPage} onclick=routeToBackend("${a.lastPage}")>${a.lastPage}</button>`
+
+    //   document.getElementById('a').innerHTML=` <button id=${a.previousPage} onclick=routeToBackend("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackend("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackend("${a.currentPage}")>${a.nextPage}</button>`
+    // }
+
+    // //const c=2
+    // document.getElementById('a').innerHTML=`<button id=${a.lastPage} onclick=routeToBackend("${a.lastPage}")>${a.lastPage}</button>`
+
+
+
+
+
+
 
     
 
@@ -291,10 +307,11 @@ async function routeToBackend(a)
 async function cartPaginationFunction(a)
 {
     //if(a.hasPreviouPage )
+    console.log(a,'i am in cart pagination function')
 
     if(a.hasPreviouPage  &&  a.currentPage!=a.lastPage)
     {
-        console.log('i am 1')
+        console.log('i am cart 1')
         //let currentPage=+a.currentPage
         //let createButtons=document.createElement('button')
         //createButtons.innerText=currentPage 
@@ -318,51 +335,51 @@ async function cartPaginationFunction(a)
         //     //document.getElementById('a').innerHTML=`<button id=${currentPage} onclick=routeToBackend("${currentPage}")>currentPage</button>  <button id=${previousPage} onclick=routeToBackend("${previousPage}")>previousPage</button>
 
 
-        // }
-        document.getElementById('c').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button>....<button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
+        
+        document.getElementById('buttons').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button>....<button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
     }
 
     else if(a.hasNextPage && a.currentPage!=a.lastPage && a.hasPreviouPage)
     {
-        console.log('i am 2')
-        document.getElementById('c').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>... <button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
+        console.log('i am cart 2')
+        document.getElementById('buttons').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>... <button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
 
     }
     else if(a.hasNextPage && a.currentPage!=a.lastPage && a.hasPreviouPage )
     {
-        console.log('i am 3')
-        document.getElementById('c').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button>  <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>  <button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
+        console.log('i am cart 3')
+        document.getElementById('buttons').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button>  <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>  <button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
 
     }
     else if(a.hasNextPage && a.currentPage!=a.lastPage && +a.currentPage+1 ==a.lastPage && a.hasPreviouPage)
     {
-        console.log('i am 4')
-        document.getElementById('c').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>`
+        console.log('i am cart  4')
+        document.getElementById('buttons').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button> <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>`
 
     }
     else if(a.hasNextPage && a.currentPage!=a.lastPage && +a.currentPage+1 ==a.lastPage)
     {
-        console.log('i am 5')
-        document.getElementById('c').innerHTML=`<button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>`
+        console.log('i am  cart 5')
+        document.getElementById('buttons').innerHTML=`<button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>`
 
     }
     else if(a.hasNextPage && a.currentPage!=a.lastPage )
     {
-        console.log('i am 6')
-        document.getElementById('c').innerHTML=`<button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>  <button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
+        console.log('i am cart  6')
+        document.getElementById('buttons').innerHTML=`<button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button> <button id=${a.nextPage} onclick=routeToBackendOfCart("${a.nextPage}")>${a.nextPage}</button>  <button id=${a.lastPage} onclick=routeToBackendOfCart("${a.lastPage}")>${a.lastPage}</button> `
 
     }
-    else if(a.currentPage==a.lastPage)
+    else if(a.currentPage==a.lastPage && a.hasPreviouPage)
     {
-        console.log('i am 7')
-        document.getElementById('c').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button>  <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button>`
+        console.log('i am cart 7')
+        document.getElementById('buttons').innerHTML=`<button id=${a.previousPage} onclick=routeToBackendOfCart("${a.previousPage}")>${a.previousPage}</button>  <button id=${a.currentPage} onclick=routeToBackendOfCart("${a.currentPage}")>${a.currentPage}</button>`
 
     }
     
 
 
     
-}
+ }
 
 async function routeToBackendOfCart(a)
 {
@@ -372,18 +389,28 @@ async function routeToBackendOfCart(a)
     //console.log(waitForGettingDataOfCart.data)
     //document.getElementById('list').innerHTML=`<li>Price-${waitForGettingDataOfCart.data.price} Title-${waitForGettingDataOfCart.data.title}</li>`
     let output=""
-    console.log(waitForGettingDataOfCart)
+    //console.log(waitForGettingDataOfCart)
     
     for(let i=0;i<waitForGettingDataOfCart.data.data.length;i=i+1)
     {
        output=output+`<li>Price-${waitForGettingDataOfCart.data.data[i].price} Title-${waitForGettingDataOfCart.data.data[i].title}<img src=${waitForGettingDataOfCart.data.data[i].imageurl}></li>`
 
     }
-    console.log(output)
+    //console.log(output)
     document.getElementById('list').innerHTML=output
+
     cartPaginationFunction(waitForGettingDataOfCart.data.key)
 }
 
+document.getElementById('order').addEventListener('click',orderfunction)
+
+async function orderfunction()
+{
+    let waitForContactingToBackend=await axios.get('http://localhost:3500/create-order')
+   window.alert(`Order Id-${waitForContactingToBackend.data.orderId} was placed successfully`)
+
+    //console.log(waitForContactingToBackend)
+}
 
 
 

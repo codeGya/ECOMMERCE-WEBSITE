@@ -1,38 +1,14 @@
-//models
+const sequelize=require('sequelize')
+const Sequelize=new sequelize('node_complete','root','Is18071995$',{dialect:'mysql',host:'localhost'})
 
-module.exports=class addProduct{
+const products=Sequelize.define("hey_i",{
+    id:{type:sequelize.INTEGER,
+        primaryKey:true
+    },
+    price:sequelize.INTEGER,
+    description:sequelize.STRING,
+    mfg:sequelize.STRING
+})
 
-    constructor(a,b)
-    {
-        this.a=a
-        this.b=b
-    }
-    static save()
-    {
-        return db.execute('INSERT INTO products (title,price,description,imageurl) VALUES (?,?,?,?)',[this.title,this.price,this.description,this.imageurl])
-    }
-}
-
-//
-module.exports=class Cart{
-
-    static addProduct(id)
-    {
-         return db.execute('SELECT * FROM products').then(([result])=>{
-            console.log(result[0].id)
-         })
-    }
-}
-
-//model
-
-class Delete{
-
-    static Delete(id){
-        return db.execute('DELETE FROM products WHERE id=1')
-        .then(()=>{
-            resizeBy.redirect('/')
-        })
-
-    }
-}
+products.create({id:1,price:100,description:'hey i am becoming lathergic',mfg:2019})
+Sequelize.sync()
